@@ -1,0 +1,13 @@
+[Unit]
+Description=stock-radar Discord 按鈕 Bot
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/stock-radar
+ExecStart=%h/.local/bin/uv run --project %h/stock-radar python -m stock_radar bot
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

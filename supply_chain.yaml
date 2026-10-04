@@ -1,0 +1,87 @@
+# 美國企業 → 台灣供應鏈關係（種子清單，僅收錄公開報導中廣為人知的關係，請依自己的研究調整）
+# weight：連動強度 0–1。relation 會顯示在報告與 AI 脈絡中。
+
+NVDA:
+  name: 輝達
+  links:
+    - {symbol: "2330", relation: 晶圓代工, weight: 0.9}
+    - {symbol: "2382", relation: AI 伺服器組裝, weight: 0.8}
+    - {symbol: "2317", relation: AI 伺服器組裝, weight: 0.7}
+    - {symbol: "3231", relation: AI 伺服器組裝, weight: 0.7}
+    - {symbol: "6669", relation: AI 伺服器, weight: 0.6}
+    - {symbol: "2376", relation: AI 伺服器, weight: 0.5}
+    - {symbol: "3017", relation: 散熱, weight: 0.6}
+    - {symbol: "3324", relation: 散熱, weight: 0.6}
+    - {symbol: "2308", relation: 電源, weight: 0.6}
+    - {symbol: "3037", relation: ABF 載板, weight: 0.5}
+    - {symbol: "2368", relation: 伺服器 PCB, weight: 0.5}
+    - {symbol: "3711", relation: 封裝測試, weight: 0.5}
+    - {symbol: "6515", relation: 測試介面, weight: 0.4}
+AMD:
+  name: 超微
+  links:
+    - {symbol: "2330", relation: 晶圓代工, weight: 0.8}
+    - {symbol: "3711", relation: 封裝測試, weight: 0.5}
+    - {symbol: "3037", relation: ABF 載板, weight: 0.4}
+AVGO:
+  name: 博通
+  links:
+    - {symbol: "2330", relation: 晶圓代工, weight: 0.7}
+    - {symbol: "3711", relation: 封裝測試, weight: 0.4}
+    - {symbol: "3037", relation: ABF 載板, weight: 0.4}
+QCOM:
+  name: 高通
+  links:
+    - {symbol: "2330", relation: 晶圓代工, weight: 0.6}
+    - {symbol: "3711", relation: 封裝測試, weight: 0.4}
+AAPL:
+  name: 蘋果
+  links:
+    - {symbol: "2330", relation: 晶圓代工, weight: 0.8}
+    - {symbol: "2317", relation: iPhone 組裝, weight: 0.8}
+    - {symbol: "4938", relation: iPhone 組裝, weight: 0.6}
+    - {symbol: "3008", relation: 鏡頭, weight: 0.6}
+    - {symbol: "3406", relation: 鏡頭, weight: 0.4}
+    - {symbol: "2474", relation: 機殼, weight: 0.4}
+MSFT:
+  name: 微軟
+  links:
+    - {symbol: "6669", relation: 雲端伺服器, weight: 0.6}
+    - {symbol: "2382", relation: 雲端伺服器, weight: 0.5}
+    - {symbol: "3231", relation: 雲端伺服器, weight: 0.4}
+    - {symbol: "2308", relation: 資料中心電源, weight: 0.4}
+META:
+  name: Meta
+  links:
+    - {symbol: "6669", relation: 雲端伺服器, weight: 0.6}
+    - {symbol: "2382", relation: 雲端伺服器, weight: 0.5}
+AMZN:
+  name: 亞馬遜
+  links:
+    - {symbol: "3661", relation: AWS 自研晶片設計服務, weight: 0.6}
+    - {symbol: "2382", relation: 雲端伺服器, weight: 0.4}
+    - {symbol: "6669", relation: 雲端伺服器, weight: 0.4}
+GOOGL:
+  name: Google
+  links:
+    - {symbol: "2382", relation: 雲端伺服器, weight: 0.5}
+    - {symbol: "2330", relation: TPU 晶圓代工, weight: 0.4}
+MU:
+  name: 美光
+  links:
+    - {symbol: "2408", relation: 記憶體同業, weight: 0.6}
+    - {symbol: "2344", relation: 記憶體同業, weight: 0.5}
+    - {symbol: "3260", relation: 記憶體模組, weight: 0.4}
+INTC:
+  name: 英特爾
+  links:
+    - {symbol: "2330", relation: 委外晶圓代工, weight: 0.4}
+^SOX:
+  name: 費城半導體指數
+  links:
+    - {symbol: "2330", relation: 半導體龍頭, weight: 0.6}
+    - {symbol: "2454", relation: IC 設計, weight: 0.5}
+    - {symbol: "2303", relation: 晶圓代工, weight: 0.5}
+    - {symbol: "3711", relation: 封裝測試, weight: 0.5}
+    - {symbol: "2379", relation: IC 設計, weight: 0.4}
+    - {symbol: "3034", relation: IC 設計, weight: 0.4}

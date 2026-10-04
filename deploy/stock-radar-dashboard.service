@@ -1,0 +1,12 @@
+[Unit]
+Description=stock-radar 儀表板（http://127.0.0.1:8501）
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/stock-radar
+ExecStart=%h/.local/bin/uv run --project %h/stock-radar python -m stock_radar dashboard
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target

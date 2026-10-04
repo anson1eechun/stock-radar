@@ -1,0 +1,13 @@
+[Unit]
+Description=stock-radar 排程器
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/stock-radar
+ExecStart=%h/.local/bin/uv run --project %h/stock-radar python -m stock_radar scheduler
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

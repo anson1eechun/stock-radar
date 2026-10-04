@@ -1,0 +1,101 @@
+# stock-radar 設定檔。金鑰等機密放在 .env（參考 .env.example）。
+
+db_path: data/radar.db
+
+universe:
+  min_price: 10              # 股價下限（元）
+  min_avg_value: 50000000    # 20 日平均成交金額下限（元）
+  min_history_days: 60       # 最少需要的歷史交易日數
+
+backfill:
+  price_days: 160            # 行情回補交易日數
+  flow_days: 30              # 三大法人、融資融券回補交易日數
+
+screening:
+  rule_top_k: 5              # 純規則組每日建議檔數
+  ai_candidates: 8           # 每日送進 AI 辯論的候選檔數
+  ai_top_k: 5                # AI 組每日建議檔數上限
+  ai_min_confidence: 0.5     # 仲裁信心低於此值不發出建議
+  window_dressing_days: 20   # 季底前幾個日曆日視為投信作帳期
+
+levels:
+  atr_period: 14
+  stop_atr: {swing: 2.0, position: 3.0}
+  target_r: [1.5, 3.0]       # 第一、第二目標（以 R 倍數計）
+  time_stop_days: {swing: 15, position: 40}
+  entry_window_days: 3       # 發出後幾個交易日內未成交即失效
+
+risk:
+  risk_per_trade_pct: 1.0    # 單筆最大虧損佔資金比例（%）
+  max_position_pct: 20.0     # 單筆部位上限（%）
+  max_open: 12               # 同時有效建議上限
+  max_per_industry: 3        # 同產業有效建議上限
+  event_blackout_days: 1     # 重大總經事件前幾個交易日減半部位
+  regime_size_multiplier: {risk_on: 1.0, neutral: 1.0, risk_off: 0.5}
+
+tracking:
+  deprecate_min_n: 30        # 至少幾筆結案才評估淘汰
+  deprecate_t_stat: -1.0     # 期望值 t 值低於此即淘汰
+  probation_min_n: 15        # 至少幾筆結案才列入觀察
+
+llm:
+  local:
+    base_url: http://127.0.0.1:8080/v1
+    model: local
+  cloud:
+    # Anthropic 官方：https://api.anthropic.com，模型 claude-sonnet-5
+    # OpenRouter（金鑰 sk-or- 開頭）：https://openrouter.ai/api，模型 anthropic/claude-sonnet-5
+    base_url: https://openrouter.ai/api
+    model: anthropic/claude-sonnet-5
+    price_per_mtok: {input: 3.0, output: 15.0}
+    daily_budget_usd: 2.0
+  # 每個角色用哪個模型：local 或 cloud。cloud 沒有金鑰或超過預算時自動改用 local。
+  roles:
+    news: local
+    invalidation: local
+    bull: local
+    bear: local
+    arbiter: cloud
+    scenario: cloud
+    earnings: local
+  # 本機模型是否開啟推理模式（較慢、偶爾推理過長）；雲端模型不受影響
+  thinking: {news: false, invalidation: false, bull: false, bear: false, earnings: false, arbiter: true, scenario: true}
+  # 可以送到雲端的文件授權類別
+  cloud_allowed_license: [public, media]
+
+news:
+  sources:
+    yahoo_rss: https://tw.stock.yahoo.com/rss?category=tw-market
+    cnyes_api: https://api.cnyes.com/media/api/v1/newslist/category/tw_stock?limit=30
+    fed_rss: https://www.federalreserve.gov/feeds/press_monetary.xml
+  cluster_hours: 48
+
+macro:
+  # ForexFactory 標題 → 事件代號、實際值來源、序列、換算方式、判定「符合預期」的容忍度
+  events:
+    Non-Farm Employment Change: {key: NFP, source: bls, series: CES0000000001, transform: diff, tol: 25}
+    Unemployment Rate: {key: UNRATE, source: bls, series: LNS14000000, transform: level, tol: 0.05}
+    Average Hourly Earnings m/m: {key: AHE, source: bls, series: CES0500000003, transform: pct_mom, tol: 0.05}
+    CPI m/m: {key: CPI, source: bls, series: CUSR0000SA0, transform: pct_mom, tol: 0.05}
+    Core CPI m/m: {key: CORE_CPI, source: bls, series: CUSR0000SA0L1E, transform: pct_mom, tol: 0.05}
+    PPI m/m: {key: PPI, source: bls, series: WPSFD4, transform: pct_mom, tol: 0.05}
+    Core PPI m/m: {key: CORE_PPI, source: bls, series: WPSFD49104, transform: pct_mom, tol: 0.05}
+    Core PCE Price Index m/m: {key: CORE_PCE, source: fred, series: PCEPILFE, transform: pct_mom, tol: 0.05}
+    Retail Sales m/m: {key: RETAIL, source: fred, series: RSAFS, transform: pct_mom, tol: 0.1}
+    Unemployment Claims: {key: CLAIMS, source: fred, series: ICSA, transform: thousands, tol: 8}
+    Advance GDP q/q: {key: GDP, source: fred, series: A191RL1Q225SBEA, transform: level, tol: 0.2}
+    Federal Funds Rate: {key: FOMC, source: fed, series: null, transform: level, tol: 0.0}
+    ISM Manufacturing PMI: {key: ISM_MFG, source: null, series: null, transform: level, tol: 0.5}
+    ISM Services PMI: {key: ISM_SVC, source: null, series: null, transform: level, tol: 0.5}
+  watch_minutes: {bls: 20, fred: 90, fed: 30}
+
+us_market:
+  # 美股與總經行情（yfinance 代號）
+  tickers: ["^SOX", "^GSPC", "^IXIC", "^VIX", "^TNX", "DX-Y.NYB", "TWD=X", "^TWII", "2330.TW",
+            "NVDA", "AAPL", "MSFT", "AMZN", "GOOGL", "META", "AMD", "AVGO", "TSM", "MU", "QCOM", "INTC"]
+  history_days: 400
+
+schedule:
+  enabled_jobs: [us_close, tw_premarket, tw_premarket_report, intraday_monitor, news_cycle,
+                 tw_postmarket, tw_evening, macro_refresh, scenario_build, us_premarket_report,
+                 revenue_collect, weekly_review]
